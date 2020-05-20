@@ -16,6 +16,6 @@
 
 ## Example usage
 
-使用：actions/hello-world-docker-action@v1
+使用：renxiangchen/test@v1
 及：
   who-to-greet: 'Mona the Octocat'
