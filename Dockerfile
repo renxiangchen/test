@@ -1,5 +1,5 @@
 #python container
-FROM python:3.5
+FROM python:3.8
 
 COPY entrypoint.sh /entrypoint.sh
 

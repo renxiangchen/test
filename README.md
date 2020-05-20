@@ -1,5 +1,4 @@
 # test
-# Hello world docker action
 
 此操作将 "Hello World" 或 "Hello" + 要问候的人员的姓名打印到日志。
 
