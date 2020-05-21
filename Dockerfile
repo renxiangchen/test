@@ -13,7 +13,7 @@ ADD PoC1-0-10-c.tar .
 RUN mkdir tools
 RUN cd tools
 
-COPY xcal-scanner.py /xc/tools/xcal-scanner.py
+COPY ./tools/xcal-scanner.py /xcal-scanner.py
 
 RUN python3  xcal-scanner.py
 
