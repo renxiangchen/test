@@ -21,7 +21,7 @@ RUN ls
 RUN ./setup.sh
 
 RUN cd /xc
-RUN makedir tools
+RUN mkdir tools
 
 COPY xcal-scanner.py /xc/tools/xcal-scanner.py
 
