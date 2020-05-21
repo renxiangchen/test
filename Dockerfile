@@ -1,27 +1,19 @@
-#python container
-FROM python:3.8
+From ubuntu:16.04
 
-COPY entrypoint.sh /entrypoint.sh
+ENV AGENT_WORKDIR=/xc
 
-RUN cd /
-RUN mkdir xc
+WORKDIR $AGENT_WORKDIR
 
-WORKDIR /xc
+RUN apt-get update && \
+    apt-get install -y build-essential gcc-multilib autoconf libtool-bin curl clang gcc-arm-none-eabi git cmake openjdk-8-jdk make python3.5 libstdc++6 python3-pip libreadline-dev libncurses5-dev rcs gawk libssl-dev && \
+    pip3 install --upgrade pip && \
+    pip3 install requests jaeger-client pygit2 && \
+    apt-get autoclean && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 ADD PoC1-0-10-c.tar .
-
-RUN mkdir tools
-
-COPY xcal-scanner.py /xc/tools/xcal-scanner.py
-
+RUN cd /xc
 RUN ls
-
-RUN cd /xc/tools
-
-RUN python3  /xc/tools/xcal-scanner.py
-
-RUN ls
-
-ENTRYPOINT ["/entrypoint.sh"]
-
+RUN setup.sh
 
