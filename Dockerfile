@@ -20,3 +20,21 @@ RUN cd /xc
 RUN ls
 RUN ./setup.sh
 
+RUN cd /xc
+RUN makedir tools
+
+COPY xcal-scanner.py /xc/tools/xcal-scanner.py
+
+RUN cd /
+COPY run.conf /xc/workdir/run.conf
+
+RUN cd /
+RUN mkdir testApp
+
+ADD goaccess-1.3.tar /testApp
+
+
+
+RUN ping mac.xcalibyte.com
+
+
