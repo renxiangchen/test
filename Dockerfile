@@ -1,6 +1,6 @@
 From ubuntu:16.04
 
-ENV AGENT_WORKDIR=/xc
+ENV AGENT_WORKDIR=/xcalagent
 
 WORKDIR $AGENT_WORKDIR
 
@@ -14,19 +14,24 @@ RUN apt-get update && \
 
 RUN pip3 install 'pygit2<=1.0.0,<1.1.0' 
 
-ADD PoC1-0-10-c.tar .
+#ADD PoC1-0-10-c.tar .
 
-RUN cd /xc
+RUN cd /
+RUN mkdir xcalagent
+
+ADD xcalagent-1.0.zip /xcalagent
+
+RUN cd /xcalagent
 RUN ls
 RUN ./setup.sh
 
-RUN cd /xc
+RUN cd /xcalagent
 RUN mkdir tools
 
-COPY xcal-scanner.py /xc/tools/xcal-scanner.py
+COPY xcal-scanner.py /xcalagent/tools/xcal-scanner.py
 
 RUN cd /
-COPY run.conf /xc/workdir/run.conf
+COPY run.conf /xcalagent/workdir/run.conf
 
 RUN cd /
 RUN mkdir testApp
