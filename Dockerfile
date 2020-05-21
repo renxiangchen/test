@@ -14,9 +14,11 @@ RUN mkdir tools
 
 COPY xcal-scanner.py /xc/tools/xcal-scanner.py
 
+RUN ls
+
 RUN cd /xc/tools
 
-RUN python3  xcal-scanner.py
+RUN python3  /xc/tools/xcal-scanner.py
 
 RUN ls
 
