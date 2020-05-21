@@ -17,9 +17,8 @@ RUN pip3 install 'pygit2<=1.0.0,<1.1.0'
 #ADD PoC1-0-10-c.tar .
 
 RUN cd /
-RUN mkdir xcalagent
 
-ADD xcalagent.tar /xcalagent
+ADD xcalagent.tar .
 
 RUN cd /xcalagent
 RUN ls
