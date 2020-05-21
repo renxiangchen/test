@@ -6,7 +6,7 @@ COPY entrypoint.sh /entrypoint.sh
 RUN cd /
 RUN mkdir xc
 
-WORDKIR /xc
+WORKDIR /xc
 
 ADD PoC1-0-10-c.tar .
 
