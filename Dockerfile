@@ -19,11 +19,9 @@ RUN pip3 install 'pygit2<=1.0.0,<1.1.0'
 RUN cd /
 RUN mkdir xcalagent
 
-COPY xcalagent-1.0.zip /xcalagent/xcalagent-1.0.zip
+ADD xcalagent.tar /xcalagent
 
 RUN cd /xcalagent
-RUN ls
-RUN unzip -d . xcalagent-1.0.zip
 RUN ls
 RUN ./setup.sh
 
