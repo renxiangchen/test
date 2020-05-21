@@ -18,5 +18,5 @@ ADD PoC1-0-10-c.tar .
 
 RUN cd /xc
 RUN ls
-RUN setup.sh
+RUN ./setup.sh
 
