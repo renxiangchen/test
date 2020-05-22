@@ -13,7 +13,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install 'pygit2<=1.0.0,<1.1.0' 
-
+RUN apt-get install maven
 #ADD PoC1-0-10-c.tar .
 
 RUN cd /
