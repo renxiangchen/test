@@ -33,11 +33,13 @@ COPY xcal-scanner.py /xcalagent/tools/xcal-scanner.py
 
 RUN cd /
 COPY run.conf /xcalagent/workdir/run.conf
+RUN cat /xcalagent/workdir/run.conf
 
 RUN cd /
 RUN mkdir testApp
 
 ADD goaccess-1.3.tar /testApp
+RUN ls -al /testApp
 
 RUN cd /testApp
 RUN ls -al
