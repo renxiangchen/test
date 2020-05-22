@@ -39,8 +39,8 @@ RUN mkdir testApp
 
 ADD goaccess-1.3.tar /testApp
 
+RUN cd /testApp
+RUN ls -al
 
-
-RUN ping mac.xcalibyte.com
 
 
