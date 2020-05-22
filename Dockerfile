@@ -16,6 +16,9 @@ RUN apt-get update && \
 RUN pip3 install 'pygit2<=1.0.0,<1.1.0' 
 #ADD PoC1-0-10-c.tar .
 
+RUN which java
+RUN export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+
 RUN cd /
 
 ADD xcalagent.tar /
