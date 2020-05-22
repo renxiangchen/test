@@ -31,7 +31,7 @@ COPY xcal-scanner.py /xcalagent/tools/xcal-scanner.py
 COPY xcal-project.conf /xcalagent/tools/xcal-project.conf
 RUN ls -al /xcalagent/tools
 
-ENV PYTHONPATH=/xcalagent/agent:/xcalagent/agent/commondef/src:/xcalagent/agent/commondef/src:/xcalagent/agent/commondef/src/common
+ENV PYTHONPATH=/xcalagent/agent:/xcalagent/agent/commondef/src:/xcalagent/agent/commondef/src/common
 RUN echo $PYTHONPATH
 
 RUN cd /
@@ -41,8 +41,9 @@ RUN cat /xcalagent/workdir/run.conf
 RUN cd /
 
 ADD goaccess-1.3.tar /
+RUN ls -al /goaccess-1.3
 
-RUN python3 /xcalagent/tools/xcal-scanner.py -d -sc /xcalagent/agent/workdir/run.conf -pc /xcalagent/tools/xcal-project.conf -usc -np
+RUN python3 /xcalagent/tools/xcal-scanner.py -d -sc /xcalagent/workdir/run.conf -pc /xcalagent/tools/xcal-project.conf -usc -np
 
 
 
