@@ -14,10 +14,8 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install 'pygit2<=1.0.0,<1.1.0' 
-#ADD PoC1-0-10-c.tar .
 
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-RUN echo $JAVA_HOME
 RUN cd /
 
 ADD xcalagent.tar /
@@ -30,19 +28,21 @@ RUN cd /xcalagent
 RUN mkdir tools
 
 COPY xcal-scanner.py /xcalagent/tools/xcal-scanner.py
+COPY xcal-project.conf /xcalagent/tools/xcal-project.conf
+RUN ls -al /xcalagent/tools
+
+ENV PYTHONPATH=/xcalagent/agent:/xcalagent/agent/commondef/src:/xcalagent/agent/commondef/src:/xcalagent/agent/commondef/src/common
+RUN echo $PYTHONPATH
 
 RUN cd /
 COPY run.conf /xcalagent/workdir/run.conf
 RUN cat /xcalagent/workdir/run.conf
 
 RUN cd /
-RUN mkdir testApp
 
-ADD goaccess-1.3.tar /testApp
-RUN ls -al /testApp
+ADD goaccess-1.3.tar /
 
-RUN cd /testApp
-RUN ls -al
+RUN python3 /xcalagent/tools/xcal-scanner.py -d -sc /xcalagent/agent/workdir/run.conf -pc /xcalagent/tools/xcal-project.conf -usc -np
 
 
 

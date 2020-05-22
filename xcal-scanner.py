@@ -1,190 +1,379 @@
-<!DOCTYPE html>
-<html class="devise-layout-html">
-<head prefix="og: http://ogp.me/ns#">
-<meta charset="utf-8">
-<meta content="IE=edge" http-equiv="X-UA-Compatible">
-<meta content="object" property="og:type">
-<meta content="GitLab" property="og:site_name">
-<meta content="Sign in" property="og:title">
-<meta content="欢迎注册 Welcome" property="og:description">
-<meta content="http://git.xc5.io/git/assets/gitlab_logo-7ae504fe4f68fdebb3c2034e36621930cd36ea87924c11ff65dbcb8ed50dca58.png" property="og:image">
-<meta content="64" property="og:image:width">
-<meta content="64" property="og:image:height">
-<meta content="http://git.xc5.io/git/users/sign_in" property="og:url">
-<meta content="summary" property="twitter:card">
-<meta content="Sign in" property="twitter:title">
-<meta content="欢迎注册 Welcome" property="twitter:description">
-<meta content="http://git.xc5.io/git/assets/gitlab_logo-7ae504fe4f68fdebb3c2034e36621930cd36ea87924c11ff65dbcb8ed50dca58.png" property="twitter:image">
+#!/usr/bin/env python3
 
-<title>Sign in · GitLab</title>
-<meta content="欢迎注册 Welcome" name="description">
-<link rel="shortcut icon" type="image/png" href="/git/assets/favicon-7901bd695fb93edb07975966062049829afb56cf11511236e61bcf425070e36e.png" id="favicon" data-original-href="/git/assets/favicon-7901bd695fb93edb07975966062049829afb56cf11511236e61bcf425070e36e.png" />
-<link rel="stylesheet" media="all" href="/git/assets/application-450cbe5102fb0f634c533051d2631578c8a6bae2c4ef1c2e50d4bfd090ce3b54.css" />
-<link rel="stylesheet" media="print" href="/git/assets/print-74c3df10dad473d66660c828e3aa54ca3bfeac6d8bb708643331403fe7211e60.css" />
+#
+#  Copyright (C) 2019-2020  XC Software (Shenzhen) Ltd.
+#
+
+import argparse
+import logging
+import sys
+import time
+import json
+
+from common import CommonGlobals
+from common.XcalException import XcalException
+from common.CommonGlobals import TaskErrorNo
+from common.ConfigObject import ConfigObject
+from XcalGlobals import *
 
 
-<link rel="stylesheet" media="all" href="/git/assets/highlight/themes/white-a20fa0d18cb98944b079c02ad5a6f46cb362f986ffd703fda24b3e8e2a4a8874.css" />
-<script>
-//<![CDATA[
-window.gon={};gon.api_version="v4";gon.default_avatar_url="http://git.xc5.io/git/assets/no_avatar-849f9c04a3a0d0cea2424ae97b27447dc64a7dbfae83c036c45b403392f0e8ba.png";gon.max_file_size=400;gon.asset_host=null;gon.webpack_public_path="/git/assets/webpack/";gon.relative_url_root="/git";gon.shortcuts_path="/git/help/shortcuts";gon.user_color_scheme="white";gon.gitlab_url="http://git.xc5.io/git";gon.revision="d90add1c62d";gon.gitlab_logo="/git/assets/gitlab_logo-7ae504fe4f68fdebb3c2034e36621930cd36ea87924c11ff65dbcb8ed50dca58.png";gon.sprite_icons="/git/assets/icons-730bc9dd942fde159bc545aaf03f0f828f24a8a4cf2cf3c95c9d5b3042a98e0d.svg";gon.sprite_file_icons="/git/assets/file_icons-7262fc6897e02f1ceaf8de43dc33afa5e4f9a2067f4f68ef77dcc87946575e9e.svg";gon.emoji_sprites_css_path="/git/assets/emoji_sprites-289eccffb1183c188b630297431be837765d9ff4aed6130cf738586fb307c170.css";gon.test_env=false;gon.disable_animations=null;gon.suggested_label_colors={"#0033CC":"UA blue","#428BCA":"Moderate blue","#44AD8E":"Lime green","#A8D695":"Feijoa","#5CB85C":"Slightly desaturated green","#69D100":"Bright green","#004E00":"Very dark lime green","#34495E":"Very dark desaturated blue","#7F8C8D":"Dark grayish cyan","#A295D6":"Slightly desaturated blue","#5843AD":"Dark moderate blue","#8E44AD":"Dark moderate violet","#FFECDB":"Very pale orange","#AD4363":"Dark moderate pink","#D10069":"Strong pink","#CC0033":"Strong red","#FF0000":"Pure red","#D9534F":"Soft red","#D1D100":"Strong yellow","#F0AD4E":"Soft orange","#AD8D43":"Dark moderate orange"};gon.first_day_of_week=1;gon.ee=false;gon.features={"snippetsVue":false,"monacoSnippets":false,"monacoBlobs":false,"monacoCi":false,"snippetsEditVue":false};
-//]]>
-</script>
+from common.XcalLogger import XcalLogger
+from components.XcalConnect import Connector
+from components.XcalTasks import TaskRunner
 
 
-<script src="/git/assets/webpack/runtime.919f8417.bundle.js" defer="defer"></script>
-<script src="/git/assets/webpack/main.3db36fc4.chunk.js" defer="defer"></script>
-<script src="/git/assets/webpack/commons~pages.admin.sessions~pages.ldap.omniauth_callbacks~pages.omniauth_callbacks~pages.profiles.t~f07ce35f.913d517b.chunk.js" defer="defer"></script>
-<script src="/git/assets/webpack/pages.sessions.new.36d594cf.chunk.js" defer="defer"></script>
-
-<meta name="csrf-param" content="authenticity_token" />
-<meta name="csrf-token" content="qNAWY18xANGHUQs0tO7YcGLA8f7dBhtpd8jPrLSaCpL57ktcDRmHLNgQhgBO1byN7p46lhB8fGp7ndLrogo4fg==" />
-
-<meta content="origin-when-cross-origin" name="referrer">
-<meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
-<meta content="#474D57" name="theme-color">
-<link rel="apple-touch-icon" type="image/x-icon" href="/git/assets/touch-icon-iphone-5a9cee0e8a51212e70b90c87c12f382c428870c0ff67d1eb034d884b78d2dae7.png" />
-<link rel="apple-touch-icon" type="image/x-icon" href="/git/assets/touch-icon-ipad-a6eec6aeb9da138e507593b464fdac213047e49d3093fc30e90d9a995df83ba3.png" sizes="76x76" />
-<link rel="apple-touch-icon" type="image/x-icon" href="/git/assets/touch-icon-iphone-retina-72e2aadf86513a56e050e7f0f2355deaa19cc17ed97bbe5147847f2748e5a3e3.png" sizes="120x120" />
-<link rel="apple-touch-icon" type="image/x-icon" href="/git/assets/touch-icon-ipad-retina-8ebe416f5313483d9c1bc772b5bbe03ecad52a54eba443e5215a22caed2a16a2.png" sizes="152x152" />
-<link color="rgb(226, 67, 41)" href="/git/assets/logo-d36b5212042cebc89b96df4bf6ac24e43db316143e89926c0db839ff694d2de4.svg" rel="mask-icon">
-<meta content="/git/assets/msapplication-tile-1196ec67452f618d39cdd85e2e3a542f76574c071051ae7effbfde01710eb17d.png" name="msapplication-TileImage">
-<meta content="#30353E" name="msapplication-TileColor">
+PREPROCESS_FILE_NAME = "preprocess.tar.gz"  # preprocessed file package name
+FILE_INFO_FILE_NAME = "fileinfo.json"       # file info's file name
+SOURCE_CODE_ARCHIVE_FILE_NAME = "source_code.zip"
+SOURCE_FILES_NAME = "source_files.json"
+BASE_SCAN_PATH = "/share/scan/"
 
 
+def get_parser():
+    parser = argparse.ArgumentParser(description = 'xcal scanner, do preprocess and drive the whole scan process')
+
+    parser.add_argument('--scanner-conf', '-sc', dest = 'scanner_conf', type = argparse.FileType('r'),
+                        metavar = 'xcal-scanner.conf', required = False, help = "scanner config file")
+    parser.add_argument('--project-conf', '-pc', dest = 'project_conf', type = argparse.FileType('r'),
+                        metavar = 'xcal-project.conf', required = False, help = 'project config file')
+    parser.add_argument('--project-id', '-pid', dest = 'project_id', required = False,
+                        help = 'the unique id of the project')
+    parser.add_argument('--project-name', '-pname', dest = 'project_name', required = False,
+                        help = 'the project name of the project, will display on UI')
+    parser.add_argument('--project-path', '-ppath', dest = 'project_path', required = False,
+                        help = 'project source code path')
+    parser.add_argument('--build-path', '-bpath', dest = 'build_path', required = False,
+                        help = 'project build path')
+    parser.add_argument('--build-command', '-bc', dest = 'build_command', required = False, default = 'make',
+                        help = 'default value is make')     # not used yet
+    parser.add_argument('--server-url', '-surl', dest = 'server_url', required = False,
+                        help = 'server url, for example: http://host:port')
+    parser.add_argument('--new-project', '-np', dest = 'new_project', action = 'store_true',
+                        help = 'indicate this is a new project')
+    parser.add_argument('--upload-source-code', '-usc', dest = 'upload_source_code', action = 'store_true',
+                        help = 'upload source code to server')
+    parser.add_argument('--debug', '-d', dest = 'debug', action = 'store_true',
+                        help = 'enable debug mode')
+
+    return parser
 
 
-</head>
+def process_arguments(arguments, global_ctx):
+    """
+    parse all the command line options, fill it into a dict object. update global_ctx
+    command line option may override the value which filled in the conf file
+    :param arguments:
+    :return: a dict object, and updated global_ctx
+    """
+    logging.info("process_arguments: begin to process arguments")
 
-<body class="application gl-browser-generic gl-platform-linux login-page navless ui-indigo" data-page="sessions:new" data-qa-selector="login_page">
+    arguments_dict = dict()
+    arguments_dict['newProject'] = arguments.new_project
+    arguments_dict['uploadSourceCode'] = arguments.upload_source_code
 
-<script>
-//<![CDATA[
-gl = window.gl || {};
-gl.client = {"isGeneric":true,"isLinux":true};
+    if arguments.scanner_conf is not None:
+        logging.debug(arguments.scanner_conf)
+        global_ctx = ConfigObject.merge_two_dicts(global_ctx, json.load(arguments.scanner_conf))
+
+    if arguments.project_conf is not None:      # if not provided, find the project path for the xcal-project.conf
+        logging.debug(arguments.project_conf)
+        arguments_dict = ConfigObject.merge_two_dicts(arguments_dict, json.load(arguments.project_conf))
+
+    # if arguments.server_url is not None:
+        # arguments_dict.get("apiServer").get("host") = arguments.server_url
+
+    if arguments.project_id is not None:
+        arguments_dict['projectId'] = arguments.project_id
+
+    if arguments.project_path is not None:
+        arguments_dict['projectPath'] = arguments.project_path
+
+    # Make sure buildPath is set
+    if arguments.build_path is not None:
+        arguments_dict['buildPath'] = arguments.build_path
+    elif arguments_dict.get("buildPath") is None:
+        # If user provides neither arguments.build_path or arguments_dict.get("buildPath"), we will use projectPath instead.
+        arguments_dict['buildPath'] = arguments_dict.get('projectPath')
+
+    if arguments_dict.get('projectId') is None or arguments_dict.get('projectPath') is None or arguments_dict.get('buildPath') is None:
+        logging.error("project id, project path, build path must be provided")
+        sys.exit(1)
+
+    return arguments_dict, global_ctx
 
 
-//]]>
-</script>
-<div class="page-wrap">
-<header class="navbar fixed-top navbar-empty">
-<img class="brand-header-logo lazy" data-src="/git/uploads/-/system/appearance/header_logo/1/b7b209_001a95ed56f9454ab7d396c1431ede03_mv2.png" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" />
-</header>
-
-<div class="login-page-broadcast">
+def get_not_none(storage_obj, key):
+    if storage_obj.get(key) is None:
+        raise XcalException("xcal-scanner", "get_not_non", "key %s not found" % key, TaskErrorNo.E_KEY_NOT_FOUND)
+    return storage_obj.get(key)
 
 
-</div>
-<div class="container navless-container">
-<div class="content">
-<div class="flash-container flash-container-page sticky">
-</div>
+def prepare_job(project_info, global_ctx, arguments_dict, scan_task_id:str, project_id:str):
+    logging.info("prepare_job: begin to prepare the job steps")
+    logging.debug("project_info: %s, arguments_dict: %s" % (project_info, arguments_dict))
 
-<div class="row mt-3">
-<div class="col-sm-12">
-<h1 class="mb-3 font-weight-normal">
-欢迎注册 Welcome
-</h1>
-</div>
-</div>
-<div class="row mb-3">
-<div class="col-sm-7 order-12 order-sm-1 brand-holder">
+    project_config = json.loads(project_info.get("projectConfig"))
+    scan_config = json.loads(project_info.get("scanConfig"))
 
-<p data-sourcepos="1:1-1:73" dir="auto">You have reached the XC5's git server, please use your account to signin,</p>&#x000A;<p data-sourcepos="3:1-3:49" dir="auto">for example, John Doe's username will be john.doe</p>&#x000A;<p data-sourcepos="5:1-5:76" dir="auto">Pay attention that there are no suffixes afterwards (@xc5.io is unnecessary)</p>&#x000A;<p data-sourcepos="7:1-7:15" dir="auto">欢迎登陆！</p>
-<h3 data-sourcepos="1:1-1:10" dir="auto">&#x000A;<a id="user-content-notice" class="anchor" href="#notice" aria-hidden="true"></a>Notice</h3>&#x000A;<p data-sourcepos="2:1-2:72" dir="auto">Please contact <a href="mailto:jason.lu@xcalibyte.com">jason.lu@xcalibyte.com</a> in case you don't have an account.</p>
+    task_config = dict()
+    task_config["sourceStorageName"] = "agent"  # hard code here
+    task_config["sourceStorageType"] = "agent"      # hard code here
+    if arguments_dict.get("uploadSourceCode"):
+        task_config["uploadSource"] = "Y"
+    else:
+        task_config["uploadSource"] = "N"
 
-</div>
-<div class="col-sm-5 order-1 order-sm-12 new-session-forms-container">
-<div id="signin-container">
-<ul class="nav-links new-session-tabs nav-tabs nav" role="tablist">
-<li class="nav-item" role="presentation">
-<a class="nav-link active" data-qa-selector="sign_in_tab" data-toggle="tab" href="#login-pane" role="tab">Sign in</a>
-</li>
-<li class="nav-item" role="presentation">
-<a class="nav-link" data-qa-selector="register_tab" data-toggle="tab" data-track-event="click_button" data-track-label="sign_in_register" data-track-property="" data-track-value="" href="#register-pane" role="tab">Register</a>
-</li>
-</ul>
+    task_config["scanFilePath"] = os.path.join(BASE_SCAN_PATH, scan_task_id)
+    task_config["sourceCodePath"] = project_config.get("relativeSourcePath")
+    task_config["preprocessPath"] = project_config.get("relativeBuildPath")
+    task_config["configContent"] = scan_config
+    task_config["projectId"] = project_id
+    task_config["scanTaskId"] = scan_task_id
+    task_config["token"] = global_ctx.get('agentToken')
 
-<div class="tab-content">
-<div class="login-box tab-pane active" id="login-pane" role="tabpanel">
-<div class="login-body">
-<form class="new_user gl-show-field-errors" id="new_user" aria-live="assertive" action="/git/users/sign_in" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="&#x2713;" /><input type="hidden" name="authenticity_token" value="OxH4uWCbiHdzNbmgbJAgjmJzaGQ1X7Eaa49FKFl/Na1qL6WGMrMPiix0NJSWq0Rz7i2jDPgl1hln2lhvT+8HQQ==" /><div class="form-group">
-<label for="user_login" class="label-bold">Username or email</label>
-<input class="form-control top" autofocus="autofocus" autocapitalize="off" autocorrect="off" required="required" title="This field is required." data-qa-selector="login_field" type="text" name="user[login]" id="user_login" />
-</div>
-<div class="form-group">
-<label class="label-bold" for="user_password">Password</label>
-<input class="form-control bottom" required="required" title="This field is required." data-qa-selector="password_field" type="password" name="user[password]" id="user_password" />
-</div>
-<div class="remember-me">
-<label for="user_remember_me">
-<input name="user[remember_me]" type="hidden" value="0" /><input class="remember-me-checkbox" type="checkbox" value="1" name="user[remember_me]" id="user_remember_me" />
-<span>Remember me</span>
-</label>
-<div class="float-right">
-<a href="/git/users/password/new">Forgot your password?</a>
-</div>
-</div>
-<div></div>
-<div class="submit-container move-submit-down">
-<input type="submit" name="commit" value="Sign in" class="btn btn-success" data-qa-selector="sign_in_button" data-disable-with="Sign in" />
-</div>
-</form>
-</div>
-</div>
+    job_config = dict()
+    job_config["agentType"] = 'offline_agent'   # hard code here
+    job_config["taskConfig"] = task_config
 
-<div class="tab-pane login-box" id="register-pane" role="tabpanel">
-<div class="login-body">
-<form class="new_new_user gl-show-field-errors" id="new_new_user" aria-live="assertive" action="/git/users" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="&#x2713;" /><input type="hidden" name="authenticity_token" value="kcPqdIowccqOqWNvRes7WOLgV7cYoESjVQqE7ul1A2HA/bdL2Bj2N9Ho7lu/0F+lbr6c39XaI6BZX5mp/+UxjQ==" /><div class="devise-errors">
+    steps = []
 
-</div>
-<div class="name form-group">
-<label class="label-bold" for="new_user_name">Full name</label>
-<input class="form-control top js-block-emoji js-validate-length" data-max-length="255" data-max-length-message="Name is too long (maximum is 255 characters)." data-qa-selector="new_user_name_field" required="required" title="This field is required." type="text" name="new_user[name]" id="new_user_name" />
-</div>
-<div class="username form-group">
-<label class="label-bold" for="new_user_username">Username</label>
-<input class="form-control middle js-block-emoji js-validate-length js-validate-username" data-max-length="255" data-max-length-message="Username is too long (maximum is 255 characters)." data-qa-selector="new_user_username_field" pattern="[a-zA-Z0-9_\.][a-zA-Z0-9_\-\.]*[a-zA-Z0-9_\-]|[a-zA-Z0-9_]" required="required" title="Please create a username with only alphanumeric characters." type="text" name="new_user[username]" id="new_user_username" />
-<p class="validation-error gl-field-error-ignore field-validation hide">Username is already taken.</p>
-<p class="validation-success gl-field-error-ignore field-validation hide">Username is available.</p>
-<p class="validation-pending gl-field-error-ignore field-validation hide">Checking username availability...</p>
-</div>
-<div class="form-group">
-<label class="label-bold" for="new_user_email">Email</label>
-<input class="form-control middle" data-qa-selector="new_user_email_field" required="required" title="Please provide a valid email address." type="email" value="" name="new_user[email]" id="new_user_email" />
-</div>
-<div class="form-group">
-<label class="label-bold" for="new_user_email_confirmation">Email confirmation</label>
-<input class="form-control middle" data-qa-selector="new_user_email_confirmation_field" required="required" title="Please retype the email address." type="email" name="new_user[email_confirmation]" id="new_user_email_confirmation" />
-</div>
-<div class="form-group append-bottom-20" id="password-strength">
-<label class="label-bold" for="new_user_password">Password</label>
-<input class="form-control bottom" data-qa-selector="new_user_password_field" required="required" pattern=".{8,}" title="Minimum length is 8 characters." type="password" name="new_user[password]" id="new_user_password" />
-<p class="gl-field-hint text-secondary">Minimum length is 8 characters</p>
-</div>
+    user_config = job_config.get("taskConfig").get("configContent")
+    preprocess_location = job_config.get("taskConfig").get("preprocessPath")
 
-<div></div>
-<div class="submit-container">
-<input type="submit" name="commit" value="Register" class="btn-register btn" data-qa-selector="new_user_register_button" data-disable-with="Register" />
-</div>
-</form></div>
-</div>
+    upload_source = False
+    if task_config.get("uploadSource") is not None and str(task_config.get("uploadSource")) == "Y":
+        upload_source = True
 
-</div>
-</div>
+    if job_config.get("sourceCodeAddress") is not None:
+        # source code url
+        timeout = "1200"
+        if job_config.get("timeout") is not None:
+            timeout = job_config.get("timeout")
+        # Add Source Code Fetch Task
+        steps.append({"id": len(steps), "parent": 0, "type": "getSourceCode",
+                      "sourceCodeAddress": job_config.get("sourceCodeAddress"), "timeout": timeout})
+    elif job_config.get("sourceCodeFileId") is not None:
+        # source code file id
+        timeout = "1200"
+        if job_config.get("timeout") is not None:
+            timeout = job_config.get("timeout")
+        # Add Source Code Fetch Task
+        steps.append({"id": len(steps), "parent": 0, "type": "downloadSourceCode",
+                      "sourceCodeFileId": job_config.get("sourceCodeFileId"), "timeout": timeout})
 
-</div>
-</div>
-</div>
-</div>
-<hr class="footer-fixed">
-<div class="container footer-container">
-<div class="footer-links">
-<a href="/git/explore">Explore</a>
-<a href="/git/help">Help</a>
-<a href="https://about.gitlab.com/">About GitLab</a>
-</div>
-</div>
+    # source_storage_name and source_storage_type is related to the fileStorage information in web service
+    source_storage_name = task_config.get("sourceStorageName", "agent").lower()
+    source_storage_type = task_config.get("sourceStorageType", "agent").lower()
+    source_code_file_id = ""
+    gitlab_project_id = ""
+    git_url = ""
 
-</div>
-</body>
-</html>
+    if source_storage_type == "volume" and source_storage_name == "volume_upload":
+        source_code_file_id = get_not_none(job_config, "sourceCodeFileId")
+    elif source_storage_type == "gitlab":
+        git_url = get_not_none(job_config, "sourceCodeAddress")
+        gitlab_project_id = get_not_none(job_config, "gitlabProjectId")
+    elif source_storage_type == "github":
+        git_url = get_not_none(job_config, "sourceCodeAddress")
+
+    source_location = task_config.get("sourceCodePath", "/")
+    logging.debug("User specified source Code location: %s" % source_location)
+
+    # Prepare the steps list
+
+    if user_config.get("lang") == "java":
+        # Java -> Plugin
+        java_command = user_config.get("build", "mvn")
+        java_command_option = user_config.get("buildConfig", "")
+
+        # Maven/Gradle Plugin invocation
+        steps.append(
+            {"id": len(steps), "parent": 0, "type": "java", "sourceStorageName": source_storage_name,
+             "workdir": preprocess_location, "outputDir": preprocess_location,
+             "buildMainDir": preprocess_location,
+             "buildCommand": java_command, "buildConfig": java_command_option})
+
+        # Runtime.o generation
+        steps.append(
+            {"id": len(steps), "parent": 0, "type": "runtimeObjectCollect", "sourceStorageName": source_storage_name,
+             "workdir": preprocess_location, "outputDir": preprocess_location,
+             "name": "runtimeObjectCollect"})
+
+        # Scanner Connector / Spotbugs
+        steps.append(
+            {"id": len(steps), "parent": 0, "type": "scannerConnector", "sourceStorageName": source_storage_name,
+             "workdir": preprocess_location, "outputDir": preprocess_location,
+             "buildMainDir": preprocess_location,
+             "name": "scannerConnector"})
+    else:
+        # C/C++ -> XcalBuild
+
+        # Prebuild (This is a back stage operation, not used right now)
+        if user_config.get("prebuild") is not None:
+            steps.append(
+                {"id": len(steps), "parent": 0, "type": "command", "sourceStorageName": source_storage_name,
+                 "workdir": preprocess_location,
+                 "cmd": user_config.get("prebuild")})
+
+        build_cmd = user_config.get("buildCommand", "make")
+
+        # Add XcalBuild Step
+        xcalbuild_step = \
+            {"id": len(steps), "parent": 0, "type": "xcalbuild", "sourceStorageName": source_storage_name,
+             "buildMainDir": preprocess_location,
+             "buildCommand": build_cmd}
+
+        # If configureCommand exists, add it to the xcalbuild step
+        if user_config.get('configureCommand') is not None:
+            xcalbuild_step["configureCommand"] = user_config.get('configureCommand')
+
+        # XcalBuild Preprocess
+        steps.append(xcalbuild_step)
+
+    # If user choose to upload source code on Agent Mode, add upload step
+    if upload_source:
+        timeout = "1200"
+        if job_config.get("timeout") is not None:
+            timeout = job_config.get("timeout")
+        steps.append(
+            {"id": len(steps), "parent": 0, "type": "compressSourceCode", "sourceStorageName": source_storage_name,
+             "sourceCodePath": task_config.get("sourceCodePath"),
+             "outputFileName": SOURCE_CODE_ARCHIVE_FILE_NAME, "inputFileName": SOURCE_FILES_NAME,
+             "timeout": timeout})
+        steps.append(
+            {"id": len(steps), "parent": 0, "type": "upload", "sourceStorageName": source_storage_name,
+             "filename": SOURCE_CODE_ARCHIVE_FILE_NAME, "name": "sourceCode"})
+
+    # Prepare FileInfo
+    steps.append(
+        {"id": len(steps), "parent": 0, "type": "prepareFileInfo", "sourceStorageName": source_storage_name,
+         "sourceStorageType": source_storage_type, "uploadSource": upload_source,
+         "srcDir": source_location, "outputFileName": FILE_INFO_FILE_NAME, "inputFileName": SOURCE_FILES_NAME,
+         "sourceCodeFileId": source_code_file_id, "gitlabProjectId": gitlab_project_id, "gitUrl": git_url,
+         "sourceCodeArchiveName": SOURCE_CODE_ARCHIVE_FILE_NAME})
+
+    # Upload FileInfo
+    steps.append({"id": len(steps), "parent": 0, "type": "upload", "sourceStorageName": source_storage_name,
+                  "filename": FILE_INFO_FILE_NAME, "name": "fileInfo"})
+
+    # Upload Preprocess Results
+    steps.append({"id": len(steps), "parent": 0, "type": "upload", "sourceStorageName": source_storage_name,
+                  "filename": PREPROCESS_FILE_NAME, "name": "preprocessResult"})
+
+    # Perform Cleanup
+    steps.append({"id": len(steps), "parent": 0, "type": "sourceCleanup"})
+
+    job_config["steps"] = steps
+    return job_config
+
+
+# login failed will terminate xcal-scanner.py program not matter what reason
+def get_token(global_ctx, log: XcalLogger):
+    login_response = Connector(log, global_ctx.get("apiServer")).login(global_ctx)
+    if 400 <= login_response.status_code < 500:
+        log.warn("get_token", "failed, please check whether username/password is incorrect")
+        sys.exit(1)
+    elif 500 <= login_response.status_code < 600:
+        log.warn("get_token", "failed, please check whether the server is available")
+        sys.exit(1)
+    else:
+        return login_response.json().get("accessToken")
+
+
+def command_line_runner():
+    start = time.time()
+
+    parser = get_parser()
+    arguments = parser.parse_args()
+    
+    global_ctx = DEFAULT_CONFIG.copy()
+    global_ctx["xcalAgentInstallDir"] = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    arguments_dict, global_ctx = process_arguments(arguments, global_ctx)
+
+    if arguments.debug is True:
+        CommonGlobals.log_level = logging.DEBUG
+        logging.getLogger().setLevel(CommonGlobals.log_level)
+        
+    elif global_ctx.get("logLevel") is not None:
+        conf_level = global_ctx.get("logLevel")
+        if conf_level == "DEBUG":
+            CommonGlobals.log_level = logging.DEBUG
+        elif conf_level == "INFO":
+            CommonGlobals.log_level = logging.INFO
+        elif conf_level == "TRACE":
+            CommonGlobals.log_level = XcalLogger.XCAL_TRACE_LEVEL
+        elif conf_level == "WARN":
+            CommonGlobals.log_level = logging.WARN
+        elif conf_level == "ERROR":
+            CommonGlobals.log_level = logging.ERROR
+        else:
+            CommonGlobals.log_level = logging.WARNING
+        logging.getLogger().setLevel(CommonGlobals.log_level)
+
+    CommonGlobals.use_jaeger = False    # disable use jaeger
+
+    # create project, get project config, add scan task
+    # prepare_job get the job_config object which will be used to drive the preprocess/scan task
+    with XcalLogger("xcal-scanner.py", "command_line_runner", real_tracer = False) as log:
+        try:
+            log.trace("command_line_runner", " trying to login to server ...")
+            global_ctx["agentToken"] = get_token(global_ctx, log)
+            log.trace("command_line_runner", " login completed.")
+
+            connector = Connector(log, global_ctx.get("apiServer"))
+            if arguments_dict.get("newProject"):
+                log.trace("command_line_runner", " creating project as newProject is marked ...")
+                log.info("command_line_runner", " sending to api: %s" % json.dumps(arguments_dict))
+                project_obj = connector.create_project(global_ctx, arguments_dict)
+                logging.debug("command_line_runner, project_obj: %s" % project_obj.json())
+                log.trace("command_line_runner", " project created.")
+            
+            project_config_obj = connector.get_project_config(global_ctx, arguments_dict.get("projectId")).json()
+            logging.debug("command_line_runner, project_config_obj: %s" % project_config_obj)
+            
+            log.trace("command_line_runner", " creating project scan task ...")
+            scan_task_obj = connector.add_scan_task(global_ctx, project_config_obj.get("project").get("id")).json()
+            logging.debug("command_line_runner, scan_task_obj: %s" % scan_task_obj)
+
+            log.trace("command_line_runner", " preparing the job configuration ...")
+            job_config = prepare_job(project_config_obj, global_ctx, arguments_dict, scan_task_obj.get("id"), project_config_obj.get("project").get("projectId"))
+            
+        except (AttributeError, json.JSONDecodeError) as err:
+            logging.error(err)
+            sys.exit(1)
+        except XcalException as err:
+            logging.error(err.message)
+            sys.exit(1)
+        log.trace("command_line_runner", " performing offline preprocessing ...")  
+        # here True means after preprocess is done, call scan service do scan
+        job_config = TaskRunner(log, global_ctx).perform_offline_tasks(global_ctx, job_config, log, True)
+        log.trace("command_line_runner", " offline preprocessing finished.")
+        # need to call update status and indicate preprocess is ok?
+        # begin to call scan start api.
+        # Connector(log).call_scan_service(global_ctx, job_config)
+
+    end = time.time()
+    logging.info("------------------------------------------------------------------------")
+    logging.info("EXECUTION SUCCESS")
+    logging.info("------------------------------------------------------------------------")
+    logging.info("Total time: %ss" % (end - start))
+    logging.info("------------------------------------------------------------------------")
+    return
+
+
+if __name__ == "__main__":
+    work_dir = os.path.abspath(os.curdir)
+    logging.getLogger('').handlers = []
+    logFormatter = '[%(asctime)20s] [%(levelname)10s] [%(threadName)s] %(message)s'
+    logging.basicConfig(format=logFormatter, level=CommonGlobals.log_level)
+    logging.addLevelName(XcalLogger.XCAL_TRACE_LEVEL, "TRACE")
+
+    rootLogger = logging.getLogger()
+    fileHandler = logging.FileHandler(os.path.join(work_dir, AGENT_LOG_FILE_NAME))
+    fileHandler.setFormatter(logging.Formatter(logFormatter))
+    rootLogger.addHandler(fileHandler)
+    command_line_runner()
+
+# TODO: maybe can update the projectConfig in web server? Add another parameter to indicate this?
+# TODO: add a parameter to print the log message to a specified file?
