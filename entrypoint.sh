@@ -1,5 +1,6 @@
 #!/bin/sh -l 
-
+cd /goaccess-1.3
+make
 cd /xcalagent/tools
 ls -al
 ping 39.108.212.149 -c 1
