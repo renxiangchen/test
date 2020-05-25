@@ -44,7 +44,6 @@ RUN cd /
 ADD goaccess-1.3.tar /
 RUN ls -al /goaccess-1.3
 
-RUN ping 39.108.212.149 -c 1
 #RUN python3 /xcalagent/tools/xcal-scanner.py -d -sc /xcalagent/workdir/run.conf -pc /xcalagent/tools/xcal-project.conf -usc -np
 
 COPY entrypoint.sh /entrypoint.sh
