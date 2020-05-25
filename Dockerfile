@@ -29,6 +29,7 @@ RUN mkdir tools
 
 COPY xcal-scanner.py /xcalagent/tools/xcal-scanner.py
 COPY xcal-project.conf /xcalagent/tools/xcal-project.conf
+RUN cat /xcalagent/tools/xcal-project.conf
 RUN ls -al /xcalagent/tools
 
 ENV PYTHONPATH=/xcalagent/agent:/xcalagent/agent/commondef/src:/xcalagent/agent/commondef/src/common
@@ -43,7 +44,7 @@ RUN cd /
 ADD goaccess-1.3.tar /
 RUN ls -al /goaccess-1.3
 
-
+RUN ping 39.108.212.149 -c 1
 #RUN python3 /xcalagent/tools/xcal-scanner.py -d -sc /xcalagent/workdir/run.conf -pc /xcalagent/tools/xcal-project.conf -usc -np
 
 COPY entrypoint.sh /entrypoint.sh
