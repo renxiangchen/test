@@ -5,7 +5,7 @@ ENV AGENT_WORKDIR=/xcalagent
 WORKDIR $AGENT_WORKDIR
 
 RUN apt-get update && \
-    apt-get install -y build-essential gcc-multilib autoconf libtool-bin maven inetutils-ping curl clang gcc-arm-none-eabi git  cmake openjdk-8-jdk make python3.5 libstdc++6 python3-pip libreadline-dev libncurses5-dev rcs gawk libssl-dev  libgit2-dev && \
+    apt-get install -y build-essential gcc-multilib autoconf libtool-bin maven inetutils-ping curl clang gcc-arm-none-eabi git  cmake openjdk-8-jdk make python3.5 libstdc++6 python3-pip libreadline-dev libncurses5-dev rcs gawk libssl-dev libgeoip-dev libncursesw5-dev libgit2-dev && \
     pip3 install --upgrade pip && \
     pip3 install requests jaeger-client && \
     pip3 install lxml && \
