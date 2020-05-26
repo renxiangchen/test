@@ -19,8 +19,6 @@ ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 RUN cd /
 RUN ls -al
 
-RUN ls -al /home/runner/work/test
-
 ADD xcalagent.tar /
 
 RUN cd /xcalagent
