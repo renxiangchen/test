@@ -17,6 +17,9 @@ RUN pip3 install 'pygit2<=1.0.0,<1.1.0'
 
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 RUN cd /
+RUN ls -al
+
+RUN ls -al /home/runner/work/test
 
 ADD xcalagent.tar /
 
