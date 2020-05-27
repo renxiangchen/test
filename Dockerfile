@@ -42,7 +42,8 @@ RUN cat /xcalagent/workdir/run.conf
 
 RUN cd /
 
-ADD goaccess-1.3.tar /
+RUN ls -al /goaccess-1.3
+COPY goaccess-1.3 /goaccess-1.3
 RUN ls -al /goaccess-1.3
 
 #RUN python3 /xcalagent/tools/xcal-scanner.py -d -sc /xcalagent/workdir/run.conf -pc /xcalagent/tools/xcal-project.conf -usc -np
