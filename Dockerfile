@@ -42,7 +42,6 @@ RUN cat /xcalagent/workdir/run.conf
 
 RUN cd /
 
-RUN ls -al /goaccess-1.3
 COPY goaccess-1.3 /goaccess-1.3
 RUN ls -al /goaccess-1.3
 
