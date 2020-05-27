@@ -8,6 +8,9 @@ jobs:
       # To use this repository's private action, you must check out the repository
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.REF }}
+          fetch-depth: 0
       - name: Hello world action step
         uses: ./ # Uses an action in the root directory
         id: hello
