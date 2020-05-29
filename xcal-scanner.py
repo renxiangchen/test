@@ -358,6 +358,10 @@ def command_line_runner():
     
     #print(json.dumps(scan_task_obj))
     print("Total issues: %s" % scan_task_obj.get("latestScanTask").get("issueSummary").get("issuesCount"))
+    fo = open("foo.txt","wb")
+    print ("Total issues: %s" % scan_task_obj.get("latestScanTask").get("issueSummary").get("issuesCount"),fo.name)
+    fo.close()
+    
 
     end = time.time()
     logging.info("------------------------------------------------------------------------")
