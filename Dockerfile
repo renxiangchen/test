@@ -29,6 +29,7 @@ RUN cd /xcalagent
 RUN mkdir tools
 
 COPY xcal-scanner.py /xcalagent/tools/xcal-scanner.py
+COPY XcalConnect.py  /xcalagent/agent/components/XcalConnect.py
 COPY xcal-project.conf /xcalagent/tools/xcal-project.conf
 RUN cat /xcalagent/tools/xcal-project.conf
 RUN ls -al /xcalagent/tools
