@@ -352,7 +352,6 @@ class Connector(object):
                         self.api_server.get("addScanTaskApi").replace("{id}", project_uuid)
                         .replace("{token}", global_ctx.get("agentToken")).replace("{status}", "pending"))
 
-        self.logger.trace("add_scan_task", "url: %s" % url)
         
         try:
             result = self.send_to_api(self.logger, url, header = {}, data = {}, method = "POST")
@@ -368,7 +367,6 @@ class Connector(object):
         del config_obj["taskConfig"]
         del config_obj["steps"]
 
-        self.logger.trace("call_scan_service", "config info: %s" % config_obj)
         url = "%s%s" % (self.host_url, self.api_server.get("scanServiceApi"))
 
         try:
