@@ -352,6 +352,12 @@ def command_line_runner():
         # need to call update status and indicate preprocess is ok?
         # begin to call scan start api.
         # Connector(log).call_scan_service(global_ctx, job_config)
+    time.sleep(30)
+    #scan_task_obj = connector.query_task(global_ctx, project_config_obj.get("project").get("id")).json()
+    scan_task_obj = connector.query_task_summary(global_ctx, project_config_obj.get("project").get("id")).json()
+    
+    #print(json.dumps(scan_task_obj))
+    print("Total issues: %s" % scan_task_obj.get("latestScanTask").get("issueSummary").get("issuesCount"))
 
     end = time.time()
     logging.info("------------------------------------------------------------------------")
