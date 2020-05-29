@@ -6,5 +6,5 @@ eval `python3 xcal-scanner.py -d -sc ../workdir/run.conf -pc xcal-project.conf -
 #python3 /xcalagent/tools/xcal-scanner.py -d -sc /xcalagent/workdir/run.conf -pc /xcalagent/tools/xcal-project.conf -usc 
 #time=$(date)
 
-time=echo $total_issues
+time=`echo $total_issues`
 echo "::set-output name=time::$time"
