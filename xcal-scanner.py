@@ -357,8 +357,8 @@ def command_line_runner():
     scan_task_obj = connector.query_task_summary(global_ctx, project_config_obj.get("project").get("id")).json()
     
     #print(json.dumps(scan_task_obj))
-    print("Total issues: %s" % scan_task_obj.get("latestScanTask").get("issueSummary").get("issuesCount"))
-    print('export total_issues="{}"'.format(scan_task_obj.get("latestScanTask").get("issueSummary").get("issuesCount")))
+    #print("Total issues: %s" % scan_task_obj.get("latestScanTask").get("issueSummary").get("issuesCount"))
+    print('export total_issues="{}"'.format(str(scan_task_obj.get("latestScanTask").get("issueSummary").get("issuesCount"))))
 
     end = time.time()
     logging.info("------------------------------------------------------------------------")
