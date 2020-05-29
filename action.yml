@@ -1,6 +1,8 @@
 # action.yml
 name: 'xc-test'
 description: 'scan test'
+outputs:
+     time: 
 
 runs:
      using: 'docker'
