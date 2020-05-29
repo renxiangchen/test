@@ -24,5 +24,4 @@ jobs:
           repo-token-user-login: 'github-actions[bot]' # The user.login for temporary GitHub tokens:  
           message: |
             Hello @${{ github.actor }}, Scan Successfully! The total defects was ${{ steps.hello.outputs.time }}
-      - name: Get the output time
-        run: echo "The total defects was ${{ steps.hello.outputs.time }}"
+          allow-repeats: true
